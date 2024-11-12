@@ -14,6 +14,12 @@
 #define MAP_WIDTH    60
 #define MAP_HEIGHT   18
 
+
+//
+extern bool object_selected;
+extern char selected_object;
+
+//
 /* ================= 위치와 방향 =================== */
 typedef struct {
     int row, column;

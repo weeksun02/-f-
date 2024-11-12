@@ -32,7 +32,13 @@ void display(
     printf("[Commands]: ...");
 
     gotoxy(status_window_pos);
-    printf("[Status]: Selected unit info ...");
+    if (object_selected) {
+        printf("[Status]: Object '%c' selected", selected_object);
+    }
+    else {
+        printf("[Status]: No object selected");
+    }
+
 }
 
 void display_resource(RESOURCE resource) {

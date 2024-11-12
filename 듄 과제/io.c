@@ -37,6 +37,8 @@ KEY get_key(void) {
 		case 77: return k_right;
 		case 80: return k_down;
 		default: return k_undef;
+		case ' ': return k_select;  // 스페이스바 입력 처리
+
 		}
 	default: return k_undef;
 	}

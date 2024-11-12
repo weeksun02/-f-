@@ -26,7 +26,8 @@ typedef struct {
 
 typedef enum {
     k_none = 0, k_up, k_right, k_left, k_down,
-    k_quit,
+    k_quit, k_select,  // 스페이스바로 선택
+    k_cancel,
     k_undef,
 } KEY;
 

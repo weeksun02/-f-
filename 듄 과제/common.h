@@ -31,10 +31,18 @@ typedef struct {
 } CURSOR;
 
 typedef enum {
-    k_none = 0, k_up, k_right, k_left, k_down,
-    k_quit, k_select,  // 스페이스바로 선택
+    k_none = 0,
+    k_up, 
+    k_right, 
+    k_left, 
+    k_down,
+    k_quit, 
+    k_select,  // 스페이스바로 선택
     k_cancel,
+    k_cancle,
     k_undef,
+    
+    
 } KEY;
 
 typedef enum {
@@ -74,4 +82,7 @@ typedef struct {
     int next_move_time;
 } OBJECT_SAMPLE;
 
+/* ================= game data =================== */
+char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH];
 #endif
+

@@ -6,7 +6,9 @@ const POSITION resource_pos = { 0, 0 };
 const POSITION map_pos = { 1, 0 };
 const POSITION system_message_pos = { MAP_HEIGHT + 1, 0 };
 const POSITION command_window_pos = { MAP_HEIGHT + 1, MAP_WIDTH + 5 };
-const POSITION status_window_pos = { 0, MAP_WIDTH + 5 };
+const POSITION command_window_pos1 = { MAP_HEIGHT+2, MAP_WIDTH + 5 };
+const POSITION status_window_pos = { 1, MAP_WIDTH + 5 };
+const POSITION status_window_pos1 = { 2, MAP_WIDTH + 13 };
 
 char backbuf[MAP_HEIGHT][MAP_WIDTH] = { 0 };
 char frontbuf[MAP_HEIGHT][MAP_WIDTH] = { 0 };
@@ -26,18 +28,14 @@ void display(
     display_cursor(cursor);
 
     gotoxy(system_message_pos);
-    printf("[System Message]: ...");
+    printf("[시스템 메세지]: ");
 
     gotoxy(command_window_pos);
-    printf("[Commands]: ...");
+    printf("[명령창]: ");
 
     gotoxy(status_window_pos);
-    if (object_selected) {
-        printf("[Status]: Object '%c' selected", selected_object);
-    }
-    else {
-        printf("[Status]: No object selected");
-    }
+    printf("[상태창]:");
+    
 
 }
 
@@ -45,98 +43,132 @@ void display_resource(RESOURCE resource) {
     // 플레이어 본부 B (좌하단)
     set_color(COLOR_B);
     gotoxy(padd(resource_pos, (POSITION) { 17, 1 }));
-    printf("B");
+    map[0][16][1] = 'B';
+    //printf("B");
     gotoxy(padd(resource_pos, (POSITION) { 17, 2 }));
-    printf("B");
+    map[0][16][2] = 'B';
+    //printf("B");
     gotoxy(padd(resource_pos, (POSITION) { 16, 1 }));
-    printf("B");
+    map[0][15][1] = 'B';
+    //printf("B");
     gotoxy(padd(resource_pos, (POSITION) { 16, 2 }));
-    printf("B");
+    map[0][15][2] = 'B';
+    //printf("B");
 
     // 플레이어 하베스터 H (좌하단)
     set_color(COLOR_B);
     gotoxy(padd(resource_pos, (POSITION) { 15, 1 }));
-    printf("H");
+    map[0][14][1] = 'H';
+    //printf("H");
 
     // 장판 P (좌하단, 2x2)
     set_color(COLOR_P);
     gotoxy(padd(resource_pos, (POSITION) { 16, 3 }));
-    printf("P");
+    map[0][15][3] = 'P';
+    //printf("P");
     gotoxy(padd(resource_pos, (POSITION) { 16, 4 }));
-    printf("P");
+    map[0][15][4] = 'P';
+    //printf("P");
     gotoxy(padd(resource_pos, (POSITION) { 17, 3 }));
-    printf("P");
+    map[0][16][3] = 'P';
+    //printf("P");
     gotoxy(padd(resource_pos, (POSITION) { 17, 4 }));
-    printf("P");
+    map[0][16][4] = 'P';
+    //printf("P");
 
-    // 적 본부 B (우상단)
+    /* 적 본부 B(우상단) */
     set_color(COLOR_BB);
     gotoxy(padd(resource_pos, (POSITION) { 2, 57 }));
-    printf("B");
+    //printf("B");
+    map[0][1][57] = 'B';
     gotoxy(padd(resource_pos, (POSITION) { 3, 57 }));
-    printf("B");
+    //printf("B");
+    map[0][2][57] = 'B';
     gotoxy(padd(resource_pos, (POSITION) { 2, 58 }));
-    printf("B");
+    //printf("B");
+    map[0][1][58] = 'B';
     gotoxy(padd(resource_pos, (POSITION) { 3, 58 }));
-    printf("B");
-    // 장판 P (우상단, 2x2)
+    //printf("B");
+    map[0][2][58] = 'B';
+
+    /* 장판 P (우상단, 2x2) */
     set_color(COLOR_P);
     gotoxy(padd(resource_pos, (POSITION) { 2, 55 }));
-    printf("P");
+    map[0][1][55] = 'P';
+    //printf("P");
     gotoxy(padd(resource_pos, (POSITION) { 3, 55 }));
-    printf("P");
+    map[0][2][55] = 'P';
+    //printf("P");
     gotoxy(padd(resource_pos, (POSITION) { 2, 56 }));
-    printf("P");
+    map[0][1][56] = 'P';
+    //printf("P");
     gotoxy(padd(resource_pos, (POSITION) { 3, 56 }));
-    printf("P");
+    map[0][2][56] = 'P';
+    //printf("P");
 
     // 적 하베스터 H (우상단)
     set_color(COLOR_BB);
     gotoxy(padd(resource_pos, (POSITION) { 4, 58 }));
-    printf("H");
+    map[0][3][58] = 'H';
+    //printf("H");
 
     // 스파이스 매장지 5
     set_color(COLOR_5);
     gotoxy(padd(resource_pos, (POSITION) { 13, 1 }));
-    printf("5");
+    map[0][12][1] = '5';
+    //printf("5");
     gotoxy(padd(resource_pos, (POSITION) { 6, 58 }));
-    printf("5");
+    map[0][5][58] = '5';
+    //printf("5");
 
     // 샌드웜 W
     set_color(COLOR_W);
     gotoxy(padd(resource_pos, (POSITION) { 3, 9 }));
-    printf("W");
+    // printf("W");
+    map[0][2][9] = 'W';
     gotoxy(padd(resource_pos, (POSITION) { 14, 44 }));
-    printf("W");
+    //  printf("W");
+    map[0][13][44] = 'W';
 
     // 바위 R (2x2 및 1x1)
     set_color(COLOR_R);
     gotoxy(padd(resource_pos, (POSITION) { 6, 19 }));
-    printf("R");
+    map[0][5][19] = 'R';
+    //printf("R");
     gotoxy(padd(resource_pos, (POSITION) { 6, 20 }));
-    printf("R");
+    map[0][5][20] = 'R';
+    //printf("R");
     gotoxy(padd(resource_pos, (POSITION) { 7, 19 }));
-    printf("R");
+    map[0][6][19] = 'R';
+    //printf("R");
     gotoxy(padd(resource_pos, (POSITION) { 7, 20 }));
-    printf("R");
+    map[0][6][20] = 'R';
+    //printf("R");
     //
     gotoxy(padd(resource_pos, (POSITION) { 15, 28 }));
-    printf("R");
+    map[0][14][28] = 'R';
+    //printf("R");
     gotoxy(padd(resource_pos, (POSITION) { 15, 27 }));
-    printf("R");
+    map[0][14][27] = 'R';
+    //printf("R");
     gotoxy(padd(resource_pos, (POSITION) { 16, 28 }));
-    printf("R");
+    map[0][15][28] = 'R';
+    //printf("R");
     gotoxy(padd(resource_pos, (POSITION) { 16, 27 }));
-    printf("R");
+    map[0][15][27] = 'R';
+    //printf("R");
     //
     gotoxy(padd(resource_pos, (POSITION) { 13, 14 }));
-    printf("R");
+    map[0][12][14] = 'R';
+    //printf("R");
     //
     gotoxy(padd(resource_pos, (POSITION) { 15, 54 }));
-    printf("R");
+    map[0][14][54] = 'R';
+    //printf("R");
 
     gotoxy(padd(resource_pos, (POSITION) { 5, 52 }));
-    printf("R");
+    map[0][4][52] = 'R';
+    //printf("R");
 
     set_color(COLOR_DEFAULT);
 }

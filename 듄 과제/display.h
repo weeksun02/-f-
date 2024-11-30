@@ -17,7 +17,9 @@
 extern const POSITION resource_pos;
 extern const POSITION system_message_pos;
 extern const POSITION command_window_pos;
+extern const POSITION command_window_pos1;
 extern const POSITION status_window_pos;
+extern const POSITION status_window_pos1;
 extern const POSITION map_pos; // display.h¿¡ ¼±¾ð
 
 
@@ -28,3 +30,4 @@ void display(
 );
 
 #endif
+

@@ -5,6 +5,7 @@
 #include "io.h"
 #include "display.h"
 
+
 void init(void);
 void intro(void);
 void outro(void);
@@ -21,7 +22,7 @@ bool object_selected = false;  // 오브젝트 선택 여부
 char selected_object = ' ';    // 선택된 오브젝트
 
 /* ================= game data =================== */
-char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH] = { 0 };
+//char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH] = { 0 };
 
 RESOURCE resource = {
     .spice = 0,
@@ -53,18 +54,25 @@ int main(void) {
     while (1) {
         KEY key = get_key();
 
-        if (is_arrow_key(key)) {
+        if (is_arrow_key(key))
+        {
             cursor_move(ktod(key));
         }
-        else {
-            switch (key) {
+        else if (is_arrow_key(key) == 0)
+        {
+            switch (key)
+            {
             case k_quit: outro();
-            case k_select: select_object(); break;  // 스페이스바로 선택
-            case k_cancel: deselect_object(); break; // ESC로 선택 취소
+            case k_select: select_object();
+                break;  // 스페이스바로 선택
+            case k_cancle: deselect_object(); break; // ESC로 선택 취소
             case k_none:
             case k_undef:
             default: break;
             }
+        }
+        else if (key == k_cancle) {
+            deselect_object();
         }
 
         sample_obj_move();
@@ -143,31 +151,61 @@ void cursor_move(DIRECTION dir) {
 }
 
 /* ================= object selection =================== */
-void select_object() {
-    char object = map[1][cursor.current.row][cursor.current.column];
-    printf("Debug: Selected object at (%d, %d): %c\n", cursor.current.row, cursor.current.column, object);
+void select_object()
+{
+    char object = map[0][cursor.current.row][cursor.current.column];
+    //printf("Debug: Selected object at (%d, %d): %c\n", cursor.current.row, cursor.current.column, object);
+    //char  input_bar = (POSITION)a;
 
     if (object == 'B' || object == 'W' || object == 'H' ||
         object == 'S' || object == 'P' || object == 'R') {
         object_selected = true;
         selected_object = object;
-
         gotoxy(status_window_pos);
         switch (object) {
-        case 'B': printf("[Status]: Base selected."); break;
-        case 'W': printf("[Status]: Sandworm selected."); break;
-        case 'H': printf("[Status]: Harvester selected."); break;
-        case 'S': printf("[Status]: Spice field selected."); break;
-        case 'P': printf("[Status]: Plate selected."); break;
-        case 'R': printf("[Status]: Rock selected."); break;
-        default: printf("[Status]: Unknown object selected."); break;
+        case 'B':
+            printf("");
+            printf("[상태창]:선택된 오브젝트는 '본진(B)'입니다    ");
+            gotoxy(status_window_pos1);
+            printf("                                      ");
+            gotoxy(command_window_pos1);
+            printf("H : 하베스터 생산(건설비용X,내구도-50)         ");
+            break;
+        case 'R':
+            printf("");
+            printf("[상태창]:선택된 오브젝트는 '바위(R)'입니다    ");
+            gotoxy(status_window_pos1);
+            printf(":샌드웜은 통과할수 없음                ");
+            break;
+        case 'W':
+            printf("");
+            printf("[상태창] 선택된 오브젝트는 '샌드웜(W)'입니다  ");
+            gotoxy(status_window_pos1);
+            printf(":사막의포식자& 스파이스의 생산자       ");
+            break;
+        case 'H':
+            printf("");
+            printf("[상태창]:선택된 오브젝트는 '하베스터(H)'입니다");
+            gotoxy(status_window_pos1);
+            printf("                                       ");
+            break;
+        case 'P':
+            printf("");
+            printf("[상태창]:선택된 오브젝트는 '장판(P)'입니다    ");
+            gotoxy(status_window_pos1);
+            printf(":건물짓기전에깔기                      ");
+            break;
         }
     }
     else {
         object_selected = false;
         selected_object = ' ';
         gotoxy(status_window_pos);
-        printf("[Status]: No valid object selected.");
+        printf("");
+        printf("[상태창]: '사막 지형'입니다                       ");
+        gotoxy(status_window_pos1);
+        printf(":기본지형(빈칸),건물을 지을수 없음        ");
+        //printf("[Status]: No valid object selected.");
     }
 }
 
@@ -175,7 +213,9 @@ void deselect_object() {
     object_selected = false;
     selected_object = ' ';
     gotoxy(status_window_pos);
-    printf("[Status]: No object selected.");
+    printf("[상태창]:                                             ");
+    gotoxy(status_window_pos1);
+    printf("                                              ");
 }
 
 POSITION sample_obj_next_position(void) {
@@ -212,3 +252,4 @@ void sample_obj_move(void) {
     map[1][obj.pos.row][obj.pos.column] = obj.repr;
     obj.next_move_time = sys_clock + obj.speed;
 }
+

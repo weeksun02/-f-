@@ -14,14 +14,35 @@
 #define COLOR_H          1   // Light Blue color
 #define COLOR_5          12  // Orange color
 
+typedef enum ColorKinds
+{
+    black,
+    blue,
+    green,
+    skyblue,
+    red,
+    pink,
+    orange,
+    white,
+    gray,
+    lightblue,
+    brightgreen,
+    sky,
+    brightred,
+    brigntpink,
+    brightyellow,
+    brightwhite,
+}ColorKinds;
+
+
 extern const POSITION resource_pos;
 extern const POSITION system_message_pos;
 extern const POSITION command_window_pos;
-extern const POSITION command_window_pos1;
+extern const POSITION command_window_pos_2;
 extern const POSITION status_window_pos;
-extern const POSITION status_window_pos1;
+extern const POSITION status_window_pos_2;
 extern const POSITION map_pos; // display.h¿¡ ¼±¾ð
-
+extern ColorKinds colorkinds;
 
 void display(
     RESOURCE resource,
@@ -30,4 +51,3 @@ void display(
 );
 
 #endif
-

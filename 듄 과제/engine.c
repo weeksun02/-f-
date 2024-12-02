@@ -5,7 +5,6 @@
 #include "io.h"
 #include "display.h"
 
-
 void init(void);
 void intro(void);
 void outro(void);
@@ -20,6 +19,7 @@ int sys_clock = 0;       // system-wide clock(ms)
 CURSOR cursor = { { 1, 1 }, {1, 1} };
 bool object_selected = false;  // 오브젝트 선택 여부
 char selected_object = ' ';    // 선택된 오브젝트
+
 
 /* ================= game data =================== */
 //char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH] = { 0 };
@@ -51,27 +51,30 @@ int main(void) {
     intro();
     display(resource, map, cursor);
 
-    while (1) {
+    while (1)
+    {
         KEY key = get_key();
+
 
         if (is_arrow_key(key))
         {
             cursor_move(ktod(key));
         }
-        else if (is_arrow_key(key) == 0)
+        else if (is_arrow_key(key) == 0 && key != k_cancel)
         {
             switch (key)
             {
             case k_quit: outro();
             case k_select: select_object();
                 break;  // 스페이스바로 선택
-            case k_cancle: deselect_object(); break; // ESC로 선택 취소
+
             case k_none:
             case k_undef:
             default: break;
             }
         }
-        else if (key == k_cancle) {
+        else if (key == k_cancel)// ESC로 선택 취소
+        {
             deselect_object();
         }
 
@@ -126,11 +129,11 @@ void cursor_move(DIRECTION dir) {
 
     // 같은 방향으로 두 번 연속 입력 시 추가 이동 (0.3초 이내)
     if (last_direction == dir && time_diff < 0.3) {
-        move_distance = 3;  // 두 번 클릭 시 이동 거리: 3칸
+        move_distance = 7;  // 두 번 클릭 시 이동 거리: 3칸
     }
 
     // 이전 위치 지우기 (공백으로 덮어쓰기)
-    printc(padd(map_pos, cursor.current), ' ', COLOR_DEFAULT);
+    print_cursor(padd(map_pos, cursor.current), ' ', COLOR_CURSOR);
 
     // 커서 이동 처리
     for (int i = 0; i < move_distance; i++) {
@@ -154,46 +157,74 @@ void cursor_move(DIRECTION dir) {
 void select_object()
 {
     char object = map[0][cursor.current.row][cursor.current.column];
-    //printf("Debug: Selected object at (%d, %d): %c\n", cursor.current.row, cursor.current.column, object);
-    //char  input_bar = (POSITION)a;
+    //  printf("Debug: Selected object at (%d, %d): %c\n", cursor.current.row, cursor.current.column, object);
+      //char  input_bar = (POSITION)a;
+    char c = "                                                          ";
 
     if (object == 'B' || object == 'W' || object == 'H' ||
         object == 'S' || object == 'P' || object == 'R') {
         object_selected = true;
         selected_object = object;
         gotoxy(status_window_pos);
-        switch (object) {
+        switch (object)
+        {
         case 'B':
+
+
             printf("");
             printf("[상태창]:선택된 오브젝트는 '본진(B)'입니다    ");
-            gotoxy(status_window_pos1);
+            gotoxy(status_window_pos_2);
             printf("                                      ");
-            gotoxy(command_window_pos1);
+            gotoxy(command_window_pos_2);
             printf("H : 하베스터 생산(건설비용X,내구도-50)         ");
-            break;
-        case 'R':
-            printf("");
-            printf("[상태창]:선택된 오브젝트는 '바위(R)'입니다    ");
-            gotoxy(status_window_pos1);
-            printf(":샌드웜은 통과할수 없음                ");
+
+
+            //  gotoxy(status_window_pos_2);                                          
+            //  printf("asdfsdfsdfasdfsadfasdfasdf.");
+
+
             break;
         case 'W':
-            printf("");
             printf("[상태창] 선택된 오브젝트는 '샌드웜(W)'입니다  ");
-            gotoxy(status_window_pos1);
+            gotoxy(status_window_pos_2);
             printf(":사막의포식자& 스파이스의 생산자       ");
+
+            gotoxy(command_window_pos_2);
+            printf("                                               ");
+
+
             break;
         case 'H':
-            printf("");
             printf("[상태창]:선택된 오브젝트는 '하베스터(H)'입니다");
-            gotoxy(status_window_pos1);
+            gotoxy(status_window_pos_2);
             printf("                                       ");
+            gotoxy(command_window_pos_2);
+            printf("                                               ");
+            break;
+        case 'S':
+            printf("[Status]: Spice field selected.");
+            gotoxy(command_window_pos_2);
+            printf("                                               ");
             break;
         case 'P':
             printf("");
             printf("[상태창]:선택된 오브젝트는 '장판(P)'입니다    ");
-            gotoxy(status_window_pos1);
+            gotoxy(status_window_pos_2);
             printf(":건물짓기전에깔기                      ");
+            gotoxy(command_window_pos_2);
+            printf("                                               ");
+            break;
+        case 'R':
+            printf("[상태창]:선택된 오브젝트는 '바위(R)'입니다    ");
+            gotoxy(status_window_pos_2);
+            printf(":샌드웜은 통과할수 없음                ");
+            gotoxy(command_window_pos_2);
+            printf("                                               ");
+            break;
+        default:
+            printf("[상태창]: Unknown object selected.");
+            gotoxy(command_window_pos_2);
+            printf("                                               ");
             break;
         }
     }
@@ -201,21 +232,25 @@ void select_object()
         object_selected = false;
         selected_object = ' ';
         gotoxy(status_window_pos);
-        printf("");
+
         printf("[상태창]: '사막 지형'입니다                       ");
-        gotoxy(status_window_pos1);
+        gotoxy(status_window_pos_2);
         printf(":기본지형(빈칸),건물을 지을수 없음        ");
+        gotoxy(command_window_pos_2);
+        printf("                                               ");
+        //gotoxy(status_window_pos_2);
         //printf("[Status]: No valid object selected.");
     }
 }
 
-void deselect_object() {
+void deselect_object()
+{
     object_selected = false;
     selected_object = ' ';
     gotoxy(status_window_pos);
-    printf("[상태창]:                                             ");
-    gotoxy(status_window_pos1);
-    printf("                                              ");
+    printf("[상태창]:                                      ");
+    gotoxy(status_window_pos_2);
+    printf("                                       ");
 }
 
 POSITION sample_obj_next_position(void) {
@@ -252,4 +287,3 @@ void sample_obj_move(void) {
     map[1][obj.pos.row][obj.pos.column] = obj.repr;
     obj.next_move_time = sys_clock + obj.speed;
 }
-

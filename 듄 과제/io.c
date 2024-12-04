@@ -63,7 +63,7 @@ KEY get_key(void) {
 
 		default: return k_undef;
 		}
-		
+
 	case 32:
 		return k_select;  // 스페이스바 입력 처리
 	case 27:

@@ -24,10 +24,14 @@ void display(
     char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH],
     CURSOR cursor)
 {
+    
+    //////////////////////////
+    
     display_resource(resource);
     display_map(map);
+    
     display_cursor(cursor);
-
+    
     set_color(white, black);
     gotoxy(system_message_pos);
     printf("[시스템 메세지]: ");

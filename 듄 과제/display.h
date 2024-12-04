@@ -41,7 +41,7 @@ extern const POSITION command_window_pos;
 extern const POSITION command_window_pos_2;
 extern const POSITION status_window_pos;
 extern const POSITION status_window_pos_2;
-extern const POSITION map_pos; // display.h¿¡ ¼±¾ð
+extern const POSITION map_pos; // display.h¢¯¢® ¨ù¡¾¨ú©£
 extern ColorKinds colorkinds;
 
 void display(

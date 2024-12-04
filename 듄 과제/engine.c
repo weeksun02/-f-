@@ -5,8 +5,6 @@
 #include "io.h"
 #include "display.h"
 
-#define SNAKELENGTH 17
-
 void init(void);
 void intro(void);
 void outro(void);
@@ -36,7 +34,7 @@ RESOURCE resource = {
 OBJECT_SAMPLE obj = {
     .pos = {1, 1},
     .dest = {MAP_HEIGHT - 2, MAP_WIDTH - 2},
-    .repr = 'o',
+    .repr = "Iamsandworm",
     .speed = 300,           // 'speed' 필드 추가
     .next_move_time = 300
 };
@@ -119,7 +117,7 @@ void init(void) {
         }
     }
 
-    map[1][obj.pos.row][obj.pos.column] = 'o';
+    map[1][obj.pos.row][obj.pos.column] = "Iamsandworm";
 }
 
 void cursor_move(DIRECTION dir) {
@@ -259,6 +257,82 @@ POSITION sample_obj_next_position(void) {
     POSITION diff = psub(obj.dest, obj.pos);
     DIRECTION dir;
 
+    // 목표 지점에 도달하면 목적지를 변경
+    if (diff.row == 0 && diff.column == 0) {
+        obj.dest = (obj.dest.row == 1 && obj.dest.column == 1) ?
+            (POSITION) {
+            MAP_HEIGHT - 2, MAP_WIDTH - 2
+        } :
+            (POSITION) {
+            1, 1
+        };
+            return obj.pos;  // 현재 위치 그대로 반환
+    }
+
+    // 이동 방향 계산
+    dir = (abs(diff.row) >= abs(diff.column)) ? (diff.row >= 0 ? d_down : d_up) :
+        (diff.column >= 0 ? d_right : d_left);
+
+    POSITION next_pos = pmove(obj.pos, dir);
+
+    // 유효한 위치인지 체크
+    if (1 <= next_pos.row && next_pos.row <= MAP_HEIGHT - 2 &&
+        1 <= next_pos.column && next_pos.column <= MAP_WIDTH - 2 &&
+        map[1][next_pos.row][next_pos.column] < 0) {
+        return next_pos;
+    }
+    else {
+        return obj.pos;  // 이동 불가능하면 현재 위치 그대로 반환
+    }
+}
+void sample_obj_move(void) {
+    if (sys_clock <= obj.next_move_time) return;
+
+    // 이전 위치 지우기
+    for (int i = 0; i < strlen(obj.repr); i++) {
+        map[1][obj.pos.row][obj.pos.column + i] = -1; // 객체가 차지한 공간을 비움
+    }
+
+    // 새 위치 계산
+    POSITION next_pos = sample_obj_next_position();
+
+    // 벽('#')이 있는지 확인
+    for (int i = 0; i < strlen(obj.repr); i++) {
+        if (map[1][next_pos.row][next_pos.column + i] == '#') {
+            // 벽에 닿으면 이동하지 않음
+            return;
+        }
+    }
+
+    // 벽이 없으면 새 위치로 이동
+    obj.pos = next_pos;
+
+    // 새 위치에 repr 출력 (한 문자씩 출력)
+    for (int i = 0; i < strlen(obj.repr); i++) {
+        map[1][obj.pos.row][obj.pos.column + i] = obj.repr[i];  // 객체가 차지하는 공간에 문자 출력
+    }
+
+    // 다음 이동 시간 설정
+    obj.next_move_time = sys_clock + obj.speed;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+POSITION sample_obj_next_position(void) {
+    POSITION diff = psub(obj.dest, obj.pos);
+    DIRECTION dir;
+
     if (diff.row == 0 && diff.column == 0) {
         obj.dest = (obj.dest.row == 1 && obj.dest.column == 1) ?
             (POSITION) {
@@ -281,11 +355,21 @@ POSITION sample_obj_next_position(void) {
     }
 }
 
+
+
+
+
 void sample_obj_move(void) {
     if (sys_clock <= obj.next_move_time) return;
+   
 
+    //////////////////////////////////////////////////////
+
+    
     map[1][obj.pos.row][obj.pos.column] = -1;
     obj.pos = sample_obj_next_position();
     map[1][obj.pos.row][obj.pos.column] = obj.repr;
     obj.next_move_time = sys_clock + obj.speed;
+    
 }
+*/

@@ -74,7 +74,7 @@ typedef struct {
 typedef struct {
     POSITION pos;
     POSITION dest;
-    char repr;
+    char repr[100];
     int speed;
     int next_move_time;
 } OBJECT_SAMPLE;

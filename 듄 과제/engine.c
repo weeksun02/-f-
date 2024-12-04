@@ -12,8 +12,9 @@ void cursor_move(DIRECTION dir);
 void sample_obj_move(void);
 POSITION sample_obj_next_position(void);
 void select_object(void);
+void key_h_h(void);
 void deselect_object(void);
-
+int a = 57;
 /* ================= control =================== */
 int sys_clock = 0;       // system-wide clock(ms)
 CURSOR cursor = { { 1, 1 }, {1, 1} };
@@ -154,8 +155,15 @@ void cursor_move(DIRECTION dir) {
 }
 
 /* ================= object selection =================== */
-void select_object()
-{
+//h눌렀을때
+void key_h_h() {
+    gotoxy(padd(resource_pos, (POSITION) { 4, 58 }));
+    map[0][3][a] = 'H';
+    a -= 1;
+    gotoxy(system_message_pos);
+    printf("[시스템 메세지]:A new harvester ready");
+}
+void select_object() {
     char object = map[0][cursor.current.row][cursor.current.column];
     //  printf("Debug: Selected object at (%d, %d): %c\n", cursor.current.row, cursor.current.column, object);
       //char  input_bar = (POSITION)a;
@@ -241,7 +249,11 @@ void select_object()
         //gotoxy(status_window_pos_2);
         //printf("[Status]: No valid object selected.");
     }
+    
+    
 }
+
+
 
 void deselect_object()
 {

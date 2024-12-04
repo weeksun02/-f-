@@ -39,7 +39,8 @@ typedef enum {
     k_quit,
     k_select,  // 스페이스바로 선택
     k_cancel,
-    k_undef
+    k_undef,
+    k_h
 } KEY;
 
 typedef enum {

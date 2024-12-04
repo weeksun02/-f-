@@ -50,6 +50,8 @@ KEY get_key(void) {
 	{
 	case 'q':
 		return k_quit;  // 'q'를 누르면 종료
+	case 'h':
+		return key_h_h();
 	case 224:
 		byte = _getch();  // MSB 224가 입력 되면 1바이트 더 전달 받기
 		switch (byte)
@@ -59,11 +61,12 @@ KEY get_key(void) {
 		case 77: return k_right;
 		case 80: return k_down;
 		case 32: return k_select;  // 스페이스바 입력 처리
-
+		//case 48: return key_h_h();
+		//case 104: return key_h_h();
 
 		default: return k_undef;
 		}
-
+	
 	case 32:
 		return k_select;  // 스페이스바 입력 처리
 	case 27:

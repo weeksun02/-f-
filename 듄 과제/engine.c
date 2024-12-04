@@ -5,6 +5,8 @@
 #include "io.h"
 #include "display.h"
 
+#define SNAKELENGTH 17
+
 void init(void);
 void intro(void);
 void outro(void);
